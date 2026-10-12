@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Azzahra — A Special Chapter</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        roseGold: '#e8b4b8',
+                        deepRose: '#881337',
+                        romanticDark: '#0d0714',
+                        glassCard: 'rgba(255, 255, 255, 0.05)',
+                        glassBorder: 'rgba(255, 255, 255, 0.12)',
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        cursive: ['Dancing Script', 'cursive']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow': 'glow 3s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 15px rgba(244, 63, 94, 0.3)' },
+                            '100%': { boxShadow: '0 0 35px rgba(244, 63, 94, 0.7)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* Custom Custom Scrollbar & Smooth Effects */
+        html {
+            scroll-behavior: smooth;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0714;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #371b2c;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5c2340;
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-panel-hover {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-panel-hover:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(244, 63, 94, 0.3);
+            transform: translateY(-4px);
+        }
+
+        /* Envelope Interactive Styles */
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+        .envelope {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+        }
+        .flap {
+            transform-origin: top;
+            transition: transform 0.6s ease 0.2s, z-index 0.2s ease 0.2s;
+        }
+        .envelope.open .flap {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+        
+        /* Ambient Background Grid */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-[#0d0714] text-slate-200 font-sans antialiased selection:bg-rose-500 selection:text-white min-h-screen relative overflow-x-hidden">
+
+    <!-- Ambient Glow Background Blobs -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-rose-900/30 rounded-full blur-[120px] animate-pulse-slow"></div>
+        <div class="absolute top-1/2 -right-40 w-[500px] h-[500px] bg-purple-900/20 rounded-full blur-[150px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+        <div class="absolute -bottom-40 left-1/3 w-96 h-96 bg-pink-900/20 rounded-full blur-[130px] animate-pulse-slow" style="animation-delay: 4s;"></div>
+        <div class="absolute inset-0 bg-grid opacity-60"></div>
+    </div>
+
+    <!-- Floating Background Canvas for Particles -->
+    <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16 space-y-24 md:space-y-36">
+
+        <!-- 1. HERO SECTION -->
+        <section class="min-h-[85vh] flex flex-col items-center justify-center text-center space-y-8 pt-10">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel text-rose-300/90 text-sm font-medium tracking-wide animate-fade-in">
+                <i data-lucide="sparkles" class="w-4 h-4 text-rose-400"></i>
+                <span>A Little Space Dedicated To You</span>
+            </div>
+
+            <div class="space-y-4 max-w-2xl">
+                <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif font-bold tracking-tight text-white">
+                    For Dear, <br/>
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-rose-300 via-pink-300 to-amber-200 font-cursive text-5xl sm:text-7xl md:text-8xl block mt-2">
+                        Azzahra
+                    </span>
+                </h1>
+                <p class="text-slate-400 text-base sm:text-lg font-light leading-relaxed px-4 pt-2">
+                    In a world full of noise, you are my favorite quiet place. Here is a small space curated with love, dedicated to honoring you and every detail that makes you so special.
+                </p>
+            </div>
+
+            <div class="pt-6 flex flex-col sm:flex-row items-center gap-4">
+                <a href="#letter-section" class="px-8 py-3.5 rounded-full bg-gradient-to-r from-rose-600 to-pink-600 text-white font-medium shadow-lg shadow-rose-900/40 hover:shadow-rose-600/30 hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center gap-2 group">
+                    <span>Read My Letter</span>
+                    <i data-lucide="arrow-down" class="w-4 h-4 group-hover:translate-y-1 transition-transform"></i>
+                </a>
+                <button onclick="scrollToSection('reasons-section')" class="px-8 py-3.5 rounded-full glass-panel text-slate-300 font-medium hover:bg-white/10 hover:text-white transition-all duration-300">
+                    Explore Reasons
+                </button>
+            </div>
+
+            <!-- Subtle Scroll Indicator -->
+            <div class="pt-16 animate-bounce text-slate-500">
+                <i data-lucide="mouse-pointer-click" class="w-5 h-5 mx-auto opacity-60"></i>
+            </div>
+        </section>
+
+
+        <!-- 2. DIGITAL LOVE LETTER SECTION -->
+        <section id="letter-section" class="scroll-mt-20">
+            <div class="text-center space-y-3 mb-12">
+                <div class="text-rose-400 text-xs font-semibold uppercase tracking-widest">Heartfelt Expression</div>
+                <h2 class="text-3xl sm:text-4xl font-serif text-white">A Letter For You</h2>
+                <p class="text-slate-400 text-sm max-w-md mx-auto">Klik amplop di bawah ini untuk membuka dan membaca pesan spesial yang kutulis untukmu.</p>
+            </div>
+
+            <div class="max-w-xl mx-auto">
+                <!-- Envelope Container -->
+                <div id="envelopeContainer" class="glass-panel p-8 sm:p-12 rounded-3xl text-center space-y-6 relative transition-all duration-500">
+                    
+                    <div id="closedState" class="space-y-6 py-6 cursor-pointer group" onclick="openLetter()">
+                        <div class="w-20 h-20 mx-auto rounded-full bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 group-hover:scale-110 group-hover:border-rose-400 transition-all duration-300 shadow-lg shadow-rose-950">
+                            <i data-lucide="mail" class="w-10 h-10 group-hover:rotate-6 transition-transform"></i>
+                        </div>
+                        <div class="space-y-2">
+                            <h3 class="text-xl font-serif text-rose-200">Ada pesan tertulis untuk Azzahra</h3>
+                            <p class="text-xs text-slate-400">Tap to unseal and reveal</p>
+                        </div>
+                        <button class="inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-rose-400 group-hover:text-rose-300 uppercase pt-2">
+                            <span>Open Letter</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                    <!-- Revealed Letter Content -->
+                    <div id="openedState" class="hidden text-left space-y-6 transition-opacity duration-700 opacity-0">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                            <span class="font-serif italic text-rose-300">Dear Azzahra,</span>
+                            <span class="text-xs text-slate-500 font-mono" id="currentDateDisplay">October 2026</span>
+                        </div>
+
+                        <div class="prose prose-invert max-w-none text-slate-300 text-sm sm:text-base leading-relaxed space-y-4 font-light">
+                            <p>
+                                Hi Zahra. Aku cuma ingin meluangkan waktu sejenak untuk menuliskan sesuatu yang jujur dan tulus buat kamu. Sometimes life gets so busy, but I never want to take your presence for granted.
+                            </p>
+                            <p>
+                                Thank you for being such an extraordinary person. Kehadiran kamu membawa ketenangan tersendiri yang tidak pernah aku temukan di tempat lain. Terima kasih sudah selalu sabar, sudah selalu mendengarkan, dan memberi warna di setiap hari-hariku.
+                            </p>
+                            <p>
+                                I truly admire your kindness, your warmth, and how you stay genuine no matter what. Kamu punya cara tersendiri untuk bikin suasana jadi lebih hangat hanya dengan senyuman kamu.
+                            </p>
+                            <p>
+                                Wherever life takes us, I hope you know how much I appreciate you—not just for what you do, but simply for who you are. Tetap jadi Azzahra yang apa adanya, ya.
+                            </p>
+                            <p class="pt-2 font-cursive text-2xl text-rose-300">
+                                With all my sincere warmth,
+                            </p>
+                        </div>
+
+                        <div class="pt-4 border-t border-white/10 flex justify-between items-center text-xs text-slate-400">
+                            <span>Always appreciating you</span>
+                            <button onclick="closeLetter()" class="text-rose-400 hover:text-rose-300 underline underline-offset-4">Close Letter</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 3. MEMORY & QUALITIES SHOWCASE (POLAROID STYLE) -->
+        <section class="space-y-12">
+            <div class="text-center space-y-3">
+                <div class="text-rose-400 text-xs font-semibold uppercase tracking-widest">Little Precious Things</div>
+                <h2 class="text-3xl sm:text-4xl font-serif text-white">What Makes You, You</h2>
+                <p class="text-slate-400 text-sm max-w-md mx-auto">Sentuh atau sorot setiap kartu untuk melihat hal-hal indah dalam dirimu.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="glass-panel glass-panel-hover p-6 rounded-2xl space-y-4 group">
+                    <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="heart-handshake" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-lg font-serif font-semibold text-white group-hover:text-rose-200 transition-colors">Your Genuine Kindness</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Cara kamu memperlakukan orang lain dengan penuh perhatian adalah hal yang selalu bikin aku terkagum-kagum. It’s a rare gem.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-panel glass-panel-hover p-6 rounded-2xl space-y-4 group">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="smile" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-lg font-serif font-semibold text-white group-hover:text-amber-200 transition-colors">That Comforting Smile</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Aksen senyum kamu selalu berhasil mencairkan hari yang berat. It literally has the power to brighten up any quiet room.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-panel glass-panel-hover p-6 rounded-2xl space-y-4 group">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-lg font-serif font-semibold text-white group-hover:text-purple-200 transition-colors">A Safe Haven</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Di dekat kamu, semuanya terasa lebih tenang dan serba pas. Thank you for creating such a safe & warm atmosphere.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="glass-panel glass-panel-hover p-6 rounded-2xl space-y-4 group">
+                    <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="sparkle" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-lg font-serif font-semibold text-white group-hover:text-pink-200 transition-colors">Unfiltered Laughs</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Tawa jujur kamu saat cerita hal-hal random selalu jadi momen terfavorit. Never lose that joyful side of yours.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="glass-panel glass-panel-hover p-6 rounded-2xl space-y-4 group">
+                    <div class="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="compass" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-lg font-serif font-semibold text-white group-hover:text-teal-200 transition-colors">Your Thoughtfulness</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Kamu selalu ingat hal-hal kecil yang sering dilupakan orang lain. Perhatian-perhatian kecil itu sangat bermakna.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="glass-panel glass-panel-hover p-6 rounded-2xl space-y-4 group">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="sun" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-lg font-serif font-semibold text-white group-hover:text-indigo-200 transition-colors">Simply Being You</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Tanpa perlu berpura-pura atau menjadi orang lain, kamu versi diri sendiri adalah yang paling istimewa.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 4. INTERACTIVE REASONS GENERATOR -->
+        <section id="reasons-section" class="scroll-mt-20">
+            <div class="glass-panel p-8 sm:p-12 rounded-3xl text-center space-y-8 relative overflow-hidden border border-rose-500/20">
+                <div class="space-y-2">
+                    <div class="text-rose-400 text-xs font-semibold uppercase tracking-widest">Interactive Thoughts</div>
+                    <h2 class="text-3xl font-serif text-white">Why You Are So Appreciated</h2>
+                    <p class="text-slate-400 text-sm">Klik tombol di bawah untuk memunculkan pesan acak manis lainnya.</p>
+                </div>
+
+                <!-- Display Card -->
+                <div class="min-h-[120px] flex items-center justify-center p-6 bg-black/30 rounded-2xl border border-white/5 max-w-xl mx-auto shadow-inner">
+                    <p id="reasonText" class="text-slate-200 text-base sm:text-lg font-serif italic transition-all duration-300">
+                        "Tekan tombol di bawah untuk mendengarkan alasan acak..."
+                    </p>
+                </div>
+
+                <button onclick="generateNextReason()" class="px-6 py-3 rounded-full bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-200 font-medium text-sm transition-all duration-300 flex items-center gap-2 mx-auto active:scale-95">
+                    <i data-lucide="refresh-cw" class="w-4 h-4" id="refreshIcon"></i>
+                    <span>Generate Another Note</span>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- 5. SWEET INTERACTIVE QUIZ / POLL -->
+        <section class="space-y-8">
+            <div class="text-center space-y-3">
+                <div class="text-rose-400 text-xs font-semibold uppercase tracking-widest">Just For Fun</div>
+                <h2 class="text-3xl font-serif text-white">A Little Question for Azzahra</h2>
+                <p class="text-slate-400 text-sm">Pilih salah satu jawaban yang paling menggambarkan dirimu hari ini.</p>
+            </div>
+
+            <div class="glass-panel p-6 sm:p-8 rounded-3xl max-w-2xl mx-auto space-y-6">
+                <p class="text-center text-slate-200 font-medium">Bagaimana perasaanmu sekarang saat membuka halaman ini?</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <button onclick="handleQuizAnswer('happy')" class="p-4 rounded-xl bg-white/5 hover:bg-rose-500/20 border border-white/10 hover:border-rose-500/40 text-slate-300 hover:text-white transition-all text-sm font-medium text-center space-y-2 group">
+                        <span class="text-2xl block group-hover:scale-125 transition-transform">😊</span>
+                        <span>Senang & Tersenyum</span>
+                    </button>
+                    <button onclick="handleQuizAnswer('touched')" class="p-4 rounded-xl bg-white/5 hover:bg-rose-500/20 border border-white/10 hover:border-rose-500/40 text-slate-300 hover:text-white transition-all text-sm font-medium text-center space-y-2 group">
+                        <span class="text-2xl block group-hover:scale-125 transition-transform">🥹</span>
+                        <span>Terharu Manis</span>
+                    </button>
+                    <button onclick="handleQuizAnswer('curious')" class="p-4 rounded-xl bg-white/5 hover:bg-rose-500/20 border border-white/10 hover:border-rose-500/40 text-slate-300 hover:text-white transition-all text-sm font-medium text-center space-y-2 group">
+                        <span class="text-2xl block group-hover:scale-125 transition-transform">✨</span>
+                        <span>Penasaran Kejutan</span>
+                    </button>
+                </div>
+
+                <div id="quizFeedback" class="hidden p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-200 text-center text-sm animate-fade-in">
+                    <!-- Dynamic feedback will appear here -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 6. THE GRAND SURPRISE BUTTON -->
+        <section class="text-center space-y-6 pt-6 pb-12">
+            <div class="space-y-2">
+                <h3 class="text-2xl font-serif text-white">Looking for a little extra warm moment?</h3>
+                <p class="text-slate-400 text-sm">Tekan tombol di bawah untuk membuka kejutan kecil khusus Azzahra.</p>
+            </div>
+
+            <button onclick="triggerGrandSurprise()" class="relative inline-flex items-center justify-center px-10 py-5 rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 text-white font-semibold text-lg shadow-2xl shadow-rose-600/50 hover:shadow-rose-500/80 hover:scale-105 active:scale-95 transition-all duration-300 group overflow-hidden">
+                <span class="relative z-10 flex items-center gap-3">
+                    <i data-lucide="gift" class="w-6 h-6 animate-bounce"></i>
+                    <span>Open Special Surprise</span>
+                </span>
+                <!-- Shimmer Effect Overlay -->
+                <div class="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+            </button>
+        </section>
+
+
+        <!-- FOOTER -->
+        <footer class="text-center text-xs text-slate-500 space-y-2 pt-12 border-t border-white/5">
+            <p>Crafted thoughtfully with care & respect for <span class="text-rose-300 font-medium">Azzahra</span>.</p>
+            <p>© <span id="yearDisplay"></span> — All warm thoughts reserved.</p>
+        </footer>
+
+    </div>
+
+    <!-- MODAL: GRAND SURPRISE -->
+    <div id="surpriseModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-all duration-500">
+        <div class="glass-panel max-w-lg w-full p-8 rounded-3xl border border-rose-500/30 text-center space-y-6 relative transform scale-90 opacity-0 transition-all duration-300" id="modalContent">
+            
+            <button onclick="closeSurpriseModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 flex items-center justify-center transition-colors">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+
+            <div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-rose-500 to-amber-400 flex items-center justify-center text-white shadow-lg shadow-rose-500/40">
+                <i data-lucide="sparkles" class="w-10 h-10 animate-pulse"></i>
+            </div>
+
+            <div class="space-y-3">
+                <h3 class="text-2xl font-serif font-bold text-white">A Little Reminder For You</h3>
+                <p class="text-rose-300 font-cursive text-xl">"You make the world softer just by being in it."</p>
+            </div>
+
+            <div class="text-slate-300 text-sm leading-relaxed space-y-3 font-light bg-black/30 p-5 rounded-2xl border border-white/5 text-left">
+                <p>
+                    Azzahra, jika suatu saat kamu merasa capek atau hari-harimu terasa agak berat, ingat ya:
+                </p>
+                <ul class="list-disc list-inside space-y-1 text-slate-300 text-xs">
+                    <li>Kamu sudah berusaha dengan sangat baik sejauh ini.</li>
+                    <li>Sifat baik dan senyummu sangat berharga bagi orang-orang di sekitarmu.</li>
+                    <li>Aku akan selalu mengapresiasi dan ada untuk mendukungmu.</li>
+                </ul>
+            </div>
+
+            <!-- Aesthetic Player Widget Visual -->
+            <div class="p-4 rounded-xl bg-white/5 border border-white/10 flex items-center gap-4 text-left">
+                <div class="w-12 h-12 rounded-lg bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-300 shrink-0">
+                    <i data-lucide="music" class="w-6 h-6"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="text-xs text-rose-300 uppercase tracking-wider font-semibold">Special Mood</div>
+                    <div class="text-sm font-medium text-white truncate">Warm Calm Vibes for Zahra</div>
+                    <div class="text-xs text-slate-400">Always On Repeat</div>
+                </div>
+                <i data-lucide="heart" class="w-5 h-5 text-rose-400 fill-rose-400/30"></i>
+            </div>
+
+            <button onclick="closeSurpriseModal()" class="w-full py-3 rounded-full bg-gradient-to-r from-rose-600 to-pink-600 text-white text-sm font-medium hover:brightness-110 transition-all">
+                Terima Kasih Manis ✨
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Set Current Dates
+        document.getElementById('yearDisplay').textContent = new Date().getFullYear();
+        
+        // Dynamic Date Formatter
+        const options = { month: 'long', year: 'numeric' };
+        document.getElementById('currentDateDisplay').textContent = new Date().toLocaleDateString('en-US', options);
+
+        // 1. Particle Canvas Background
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = -Math.random() * 0.5 - 0.2;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.y < 0) {
+                    this.y = canvas.height;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(244, 63, 94, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 45; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Smooth Scroll Helper
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 2. Letter Open/Close Handler
+        function openLetter() {
+            const closedState = document.getElementById('closedState');
+            const openedState = document.getElementById('openedState');
+            
+            closedState.classList.add('hidden');
+            openedState.classList.remove('hidden');
+            
+            setTimeout(() => {
+                openedState.classList.remove('opacity-0');
+            }, 50);
+
+            // Trigger light confetti burst
+            confetti({
+                particleCount: 25,
+                spread: 50,
+                origin: { y: 0.6 },
+                colors: ['#f43f5e', '#fb7185', '#fef08a']
+            });
+        }
+
+        function closeLetter() {
+            const closedState = document.getElementById('closedState');
+            const openedState = document.getElementById('openedState');
+
+            openedState.classList.add('opacity-0');
+            setTimeout(() => {
+                openedState.classList.add('hidden');
+                closedState.classList.remove('hidden');
+            }, 300);
+        }
+
+        // 3. Reasons Array & Generator Logic
+        const reasonsList = [
+            "Cara kamu merespon cerita-ceritaku selalu bikin aku merasa benar-benar didengar.",
+            "You have this soft aura that instantly calms down any messy day.",
+            "Kebaikan kecil yang kamu lakukan seringkali tanpa kamu sadari, tapi itu sangat berarti.",
+            "You stay true to yourself, and that honesty is so attractive.",
+            "Senyuman manis Azzahra itu selalu punya daya magis sendiri untuk mencairkan suasana.",
+            "Thank you for being patient even when things aren't perfectly smooth.",
+            "Perspektif kamu dalam melihat berbagai hal selalu dewasa dan membukakan mata.",
+            "In a room full of noise, your presence is my favorite soft melody."
+        ];
+
+        let currentReasonIndex = -1;
+
+        function generateNextReason() {
+            const reasonText = document.getElementById('reasonText');
+            const refreshIcon = document.getElementById('refreshIcon');
+
+            // Spin icon animation
+            refreshIcon.classList.add('animate-spin');
+            setTimeout(() => refreshIcon.classList.remove('animate-spin'), 500);
+
+            // Select random reason without repeating immediately
+            let nextIndex;
+            do {
+                nextIndex = Math.floor(Math.random() * reasonsList.length);
+            } while (nextIndex === currentReasonIndex && reasonsList.length > 1);
+
+            currentReasonIndex = nextIndex;
+
+            // Fade transition
+            reasonText.style.opacity = '0';
+            setTimeout(() => {
+                reasonText.textContent = `"${reasonsList[nextIndex]}"`;
+                reasonText.style.opacity = '1';
+            }, 200);
+        }
+
+        // 4. Interactive Quiz Response Handler
+        function handleQuizAnswer(type) {
+            const feedback = document.getElementById('quizFeedback');
+            feedback.classList.remove('hidden');
+
+            if (type === 'happy') {
+                feedback.innerHTML = "✨ <b>I'm so glad to hear that!</b> Tujuan halaman ini memang khusus untuk bikin kamu tersenyum hari ini.";
+            } else if (type === 'touched') {
+                feedback.innerHTML = "🤍 <b>Warm hugs for you!</b> Semua tulisan di sini tulus dari hati untuk Azzahra.";
+            } else if (type === 'curious') {
+                feedback.innerHTML = "🎁 <b>Penasaran?</b> Coba scroll ke bawah dan tekan tombol kejutan di bawah ya!";
+            }
+        }
+
+        // 5. Grand Surprise Modal Handler
+        function triggerGrandSurprise() {
+            const modal = document.getElementById('surpriseModal');
+            const modalContent = document.getElementById('modalContent');
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            setTimeout(() => {
+                modalContent.classList.remove('scale-90', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 50);
+
+            // Full Grand Confetti Burst
+            const duration = 3 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 60 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+                const particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                    colors: ['#f43f5e', '#e8b4b8', '#ffffff']
+                }));
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                    colors: ['#f43f5e', '#e8b4b8', '#ffffff']
+                }));
+            }, 250);
+        }
+
+        function closeSurpriseModal() {
+            const modal = document.getElementById('surpriseModal');
+            const modalContent = document.getElementById('modalContent');
+
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-90', 'opacity-0');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+    </script>
+</body>
+</html>
